@@ -1,15 +1,41 @@
 // The Swift Programming Language
-// https://docs.swift.org/swift-book
 
 import SwiftUI
 
-public struct MenuDrawer : View {
+public struct MenuDrawer<T,Content,TabItems>: View where Content : View,TabItems : View,T:Hashable {
     
-    public init() {
-        
-    }
+    let configuration:MenuConfiguration<T>
+    
+    @ViewBuilder let content: () -> Content
+    @ViewBuilder let tabItems: () -> TabItems
 
+    public init(
+        configuration:MenuConfiguration<T>,
+        @ViewBuilder content:@escaping () -> Content,
+        @ViewBuilder tabItems: @escaping () -> TabItems) {
+            self.configuration = configuration
+            self.content = content
+            self.tabItems = tabItems
+        }
+    
     public var body: some View{
-        Text("1231231")
+        
+        ZStack{
+            content()
+            configuration.builder(tabItems: tabItems)
+        }
+        .frame(maxWidth: .infinity,maxHeight: .infinity)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
